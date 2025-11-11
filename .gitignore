@@ -484,4 +484,4 @@ $RECYCLE.BIN/
 *.swp
 
 # Custom
-src/API/Tests/.
+src/API/Tests/
