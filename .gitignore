@@ -485,3 +485,4 @@ $RECYCLE.BIN/
 
 # Custom
 src/API/Tests/
+src/API/appsettings.Development.json

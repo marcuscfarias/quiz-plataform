@@ -11,8 +11,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Update="appsettings.Production.Development.json">
-        <DependentUpon>appsettings.Production.json</DependentUpon>
+      <Content Update="appsettings.Development.json">
+        <DependentUpon>appsettings.json</DependentUpon>
       </Content>
     </ItemGroup>
 
