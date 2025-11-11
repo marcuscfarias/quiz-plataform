@@ -10,4 +10,10 @@
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Content Update="appsettings.Production.Development.json">
+        <DependentUpon>appsettings.Production.json</DependentUpon>
+      </Content>
+    </ItemGroup>
+
 </Project>
