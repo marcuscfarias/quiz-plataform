@@ -1,0 +1,59 @@
+name: 🧪 .NET CI – Build & Test
+
+on:
+  push:
+    branches: [ "main", "*/*" ]
+  pull_request:
+    branches: [ "main", "*/*" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      # 1️⃣ Checkout the code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2️⃣ Set up .NET environment (example: .NET 8)
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      # 3️⃣ Restore dependencies
+      - name: Restore dependencies
+        run: dotnet restore src
+
+      # 4️⃣ Build the application in Release mode
+      - name: Build
+        run: dotnet build src --configuration Release --no-restore
+
+      # 5️⃣ Run unit tests
+      - name: Run tests
+        run: dotnet test src --configuration Release --no-build --verbosity normal
+        
+  deploy:
+    # 🚦 Run only if the build job succeeded AND branch == main
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Publish app
+        run: dotnet publish src/YourProject.csproj -c Release -o ./publish
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'quiz-platform'
+          package: ./publish
