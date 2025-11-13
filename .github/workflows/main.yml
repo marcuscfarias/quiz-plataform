@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       # 1️⃣ Checkout the code
@@ -33,3 +33,27 @@ jobs:
       # 5️⃣ Run unit tests
       - name: Run tests
         run: dotnet test src --configuration Release --no-build --verbosity normal
+        
+  deploy:
+    # 🚦 Run only if the build job succeeded AND branch == main
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Publish app
+        run: dotnet publish src/YourProject.csproj -c Release -o ./publish
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'quiz-platform'
+          package: ./publish
