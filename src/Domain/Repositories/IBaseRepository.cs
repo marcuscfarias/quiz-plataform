@@ -5,9 +5,9 @@ namespace Domain.Repositories;
 public interface IBaseRepository<TEntity> where TEntity : BaseEntity
 {
     //TODO: add pagination
-    Task<IEnumerable<TEntity>> GetAllAsync();
-    Task<TEntity> GetByIdAsync(int id);
-    Task<int> AddAsync(TEntity entity);
-    Task UpdateAsync(TEntity entity);
-    Task DeleteAsync(TEntity entity);
+    Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken);
+    Task<TEntity> GetByIdAsync(int id, CancellationToken cancellationToken);
+    Task<int> AddAsync(TEntity entity, CancellationToken cancellationToken);
+    Task UpdateAsync(TEntity entity, CancellationToken cancellationToken);
+    Task DeleteAsync(TEntity entity, CancellationToken cancellationToken);
 }
