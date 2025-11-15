@@ -1,4 +1,5 @@
 ﻿using Application.Users.Contracts;
+using Application.Users.Mappers;
 using Domain.Entities;
 using Domain.Repositories;
 
@@ -7,19 +8,18 @@ namespace Application.Users.Services;
 
 public class UserService(IUserRepository userRepository) : IUserService
 {
-    private readonly IUserRepository _userRepository = userRepository;
-
     public async Task<int> CreateUserAsync(CreateUserRequest request, CancellationToken cancellationToken)
     {
-        // string email = request.Email;
-        // User? existingUser = await _userRepository.GetUserByEmailAsync(email, cancellationToken);
-        //
-        // if (existingUser is not null)
-        //     throw new ApplicationException("User with this email already exists.");
+        var hasUserRegistered = await userRepository.HasUserByEmailAsync(request.Email, cancellationToken);
+        if (hasUserRegistered)
+            throw new ApplicationException("User with that email already exists");
 
-        //TODO: add hashpassword
-        User newUser = new(request.Name, request.Password, request.Email, request.BirthDate, true);
+        //TODO: add hashedPassword service
+        var hashedPassword = ""; //do the service
+        var newUser = request.ToDomainWithHashedPassword(hashedPassword);
         
-        return await _userRepository.AddAsync(newUser, cancellationToken);
+        var newUserId = await userRepository.AddAsync(newUser, cancellationToken);
+        
+        return newUserId;
     }
 }
