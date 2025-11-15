@@ -15,7 +15,7 @@ public class UserService(IUserRepository userRepository) : IUserService
             throw new ApplicationException("User with that email already exists");
 
         //TODO: add hashedPassword service
-        var hashedPassword = ""; //do the service
+        var hashedPassword = "";
         var newUser = request.ToDomainWithHashedPassword(hashedPassword);
         
         var newUserId = await userRepository.AddAsync(newUser, cancellationToken);
