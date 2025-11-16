@@ -5,7 +5,6 @@ using Domain.Repositories;
 
 namespace Application.Users.Services;
 
-
 public class UserService(IUserRepository userRepository) : IUserService
 {
     public async Task<int> CreateUserAsync(CreateUserRequest request, CancellationToken cancellationToken)
@@ -17,9 +16,21 @@ public class UserService(IUserRepository userRepository) : IUserService
         //TODO: add hashedPassword service
         var hashedPassword = "";
         var newUser = request.ToDomainWithHashedPassword(hashedPassword);
-        
+
         var newUserId = await userRepository.AddAsync(newUser, cancellationToken);
-        
+
         return newUserId;
+    }
+
+    public async Task<GetUserByIdResponse> GetUserByIdAsync(int userId, CancellationToken cancellationToken)
+    {
+        var user = await userRepository.GetByIdAsync(userId, cancellationToken);
+
+        if (user is null)
+            throw new ApplicationException("User not found.");
+        
+        var userResponse = user.ToResponse();
+
+        return userResponse;
     }
 }
