@@ -6,6 +6,7 @@ namespace Application;
 
 public static class ServiceProvider
 {
+    
     public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<IUserService, UserService>();

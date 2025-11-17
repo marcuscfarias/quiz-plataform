@@ -24,15 +24,15 @@ jobs:
 
       # 3️⃣ Restore dependencies
       - name: Restore dependencies
-        run: dotnet restore src
-
+        run: dotnet restore src/Quiz-Platform.sln
+      
       # 4️⃣ Build the application in Release mode
       - name: Build
-        run: dotnet build src --configuration Release --no-restore
+        run: dotnet build src/Quiz-Platform.sln --configuration Release --no-restore
 
       # 5️⃣ Run unit tests
       - name: Run tests
-        run: dotnet test src --configuration Release --no-build --verbosity normal
+        run: dotnet test src/Quiz-Platform.sln --configuration Release --no-build --verbosity normal
         
   deploy:
     # 🚦 Run only if the build job succeeded AND branch == main
